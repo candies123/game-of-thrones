@@ -5,7 +5,7 @@ create index on :House(name);
 create index on :Seat(name);
 create index on :Region(name);
 
-call apoc.load.jsonArray('https://github.com/niyanchun/game-of-thrones/blob/master/characters.json') yield value
+call apoc.load.jsonArray('file:///examples/game-of-thrones/characters.json') yield value
 with apoc.convert.toMap(value) as data
 with apoc.map.clean(data, [],['',[''],[],null]) as data
 with apoc.map.fromPairs([k in keys(data) | [toLower(substring(k,0,1))+substring(k,1,length(k)), data[k]]]) as data
@@ -19,7 +19,7 @@ FOREACH (id in case data.mother when null then [] else [data.mother] end | MERGE
 FOREACH (id in case data.spouse when null then [] else [data.spouse] end | MERGE (o:Person {id:id}) MERGE (o)-[:SPOUSE]-(p))
 return p.id, p.name;
 
-call apoc.load.jsonArray('https://github.com/niyanchun/game-of-thrones/blob/master/houses.json') yield value
+call apoc.load.jsonArray('file:///examples/game-of-thrones/houses.json') yield value
 with apoc.convert.toMap(value) as data
 with apoc.map.clean(data, [],['',[''],[],null]) as data
 with apoc.map.fromPairs([k in keys(data) | [toLower(substring(k,0,1))+substring(k,1,length(k)), data[k]]]) as data
